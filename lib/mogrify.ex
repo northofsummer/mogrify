@@ -72,6 +72,7 @@ defmodule Mogrify do
     Enum.flat_map(image.operations, &normalize_arguments/1)
   end
 
+  defp normalize_arguments({:text, string}),           do: [string]
   defp normalize_arguments({:image_operator, params}), do: ~w(#{params})
   defp normalize_arguments({"annotate", params}),      do: ~w(-annotate #{params})
   defp normalize_arguments({"+" <> option, nil}),      do: ["+#{option}"]
@@ -231,4 +232,9 @@ defmodule Mogrify do
   def image_operator(image, operator) do
     %{image | operations: image.operations ++ [{:image_operator, operator}]}
   end
+
+  def text(image, string) do
+    %{image | operations: image.operations ++ [{:text, string}]}
+  end
+
 end
